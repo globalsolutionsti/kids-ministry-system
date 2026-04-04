@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Kids Ministry</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="login-container" id="login">
+  <h2>Amistad Fuertes Kids</h2>
+  <input type="text" id="username" placeholder="Usuario">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
+</div>
+
+<div id="app" class="hidden">
+  <h2>Catálogo Kids</h2>
+
+  <h3>Agregar Niño</h3>
+  <input type="text" id="kidName" placeholder="Nombre del niño">
+  <input type="text" id="kidPhoto" placeholder="URL de foto">
+  <button onclick="addKid()">Guardar Niño</button>
+
+  <h3>Agregar Adulto Autorizado</h3>
+  <input type="text" id="adultName" placeholder="Nombre">
+  <input type="text" id="adultPhone" placeholder="Teléfono">
+  <button onclick="addAdult()">Guardar Adulto</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
