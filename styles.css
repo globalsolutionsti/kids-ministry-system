@@ -26,3 +26,50 @@ button {
 .hidden {
   display: none;
 }
+.dashboard-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+border-radius:15px;
+padding:15px;
+margin:10px 0;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.kid-info{
+flex:2;
+}
+
+.kid-photo{
+width:80px;
+height:80px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.adults{
+display:flex;
+gap:10px;
+margin-top:10px;
+flex-wrap:wrap;
+}
+
+.adult{
+text-align:center;
+}
+
+.adult img{
+width:50px;
+height:50px;
+border-radius:50%;
+object-fit:cover;
+display:block;
+margin:auto;
+}
+
+.adult-name{
+font-size:12px;
+}
+
+v
