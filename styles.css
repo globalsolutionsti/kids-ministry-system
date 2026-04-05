@@ -238,3 +238,22 @@ video{
   }
 
 }
+
+
+/* 📱 BOTON SALIR RESPONSIVE */
+@media (max-width:768px){
+
+  .logout-btn{
+    position:fixed;
+    bottom:15px;
+    right:15px;
+    top:auto;
+    background:#ef4444;
+    padding:12px 15px;
+    font-size:14px;
+    border-radius:50px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    z-index:999;
+  }
+
+}
