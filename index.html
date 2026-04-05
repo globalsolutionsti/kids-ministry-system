@@ -67,29 +67,30 @@ reader.readAsDataURL(file);
 // LOGIN
 async function login(){
 try{
-const r=await fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-action:"login",
-username:document.getElementById("user").value,
-password:String(document.getElementById("pass").value)
-})
+
+const formData = new URLSearchParams();
+formData.append("action","login");
+formData.append("username",document.getElementById("user").value);
+formData.append("password",document.getElementById("pass").value);
+
+const r = await fetch(API,{
+  method:"POST",
+  body:formData
 });
 
-const d=await r.json();
+const d = await r.json();
 
 if(d.success){
-document.getElementById("loginView").classList.add("hidden");
-document.getElementById("appView").classList.remove("hidden");
-load();
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("appView").classList.remove("hidden");
+  load();
 }else{
-alert("Login incorrecto");
+  alert("Login incorrecto");
 }
 
 }catch(e){
-alert("Error conexión");
 console.log(e);
+alert("Error conexión");
 }
 }
 
