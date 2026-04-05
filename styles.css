@@ -15,17 +15,22 @@ header {
   font-size: 16px;
 }
 
-/* ✅ BOTON SALIR LIMPIO */
+/* 🔥 BOTON SALIR PROFESIONAL (FIX DEFINITIVO) */
 .logout-btn{
   position:absolute;
   right:10px;
   top:10px;
+
+  width:auto !important; /* 🔥 rompe el width global */
+  
   background:#ef4444;
   color:white;
   border:none;
+
   padding:6px 12px;
   font-size:12px;
-  border-radius:8px;
+  border-radius:6px;
+
   cursor:pointer;
   transition:0.2s;
 }
@@ -65,7 +70,7 @@ input{
 
 button{
   padding:12px;
-  width:100%;
+  width:100%; /* SOLO botones normales */
   background:#2563eb;
   color:white;
   border:none;
@@ -223,18 +228,21 @@ video{
     width:120px;
   }
 
-  /* ✅ BOTON SALIR MOVIL (PEQUEÑO Y LIMPIO) */
+  /* 🔥 BOTON SALIR MOVIL LIMPIO */
   .logout-btn{
     position:fixed;
     bottom:15px;
     right:15px;
     top:auto;
 
-    padding:8px 14px;
-    font-size:13px;
-    border-radius:20px;
+    width:auto !important;
 
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    padding:8px 12px;
+    font-size:12px;
+
+    border-radius:15px;
+
+    box-shadow:0 3px 8px rgba(0,0,0,0.15);
   }
 
   .logout-btn:active{
