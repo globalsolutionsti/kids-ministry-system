@@ -131,16 +131,14 @@ location.reload();
 // ADULTOS
 function addAdult(){
 const div=document.createElement("div");
-div.className="adult-form";
+div.className="card";
 
 div.innerHTML=`
 <input placeholder="Nombre" class="name">
 <input placeholder="Teléfono" class="phone">
-<button onclick="openCamera('adult')">📸 Foto</button>
-<img class="adult-preview">
+<input type="file" accept="image/*" capture="environment" class="photo">
 `;
-
-adultsContainer.appendChild(div);
+document.getElementById("adultsContainer").appendChild(div);
 }
 
 // GUARDAR
