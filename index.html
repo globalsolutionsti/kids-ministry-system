@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kids Ministry Pro</title>
+<title>Ministerio Kids</title>
 
 <link rel="stylesheet" href="styles.css">
-
 </head>
 
 <body>
 
 <header>
-Amistad Fuertes Kids
+Ministerio Kids - Gestión de Niños (as)
 <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Salir</button>
 </header>
 
 <!-- LOGIN -->
 <div class="login-container" id="loginView">
   <div class="login-box">
-    <h2>Login</h2>
+    <h2>Bienvenido</h2>
+    <p>Ministerio Kids</p>
     <input id="user" placeholder="Usuario">
     <input id="pass" type="password" placeholder="Contraseña">
-    <button onclick="login()">Entrar</button>
+    <button onclick="login()">Ingresar</button>
   </div>
 </div>
 
@@ -34,116 +34,113 @@ Amistad Fuertes Kids
 
 <input id="kidName" placeholder="Nombre del niño">
 
-<button onclick="openCamera('kid')" class="camera-btn">📸 Tomar Foto Niño (a)</button>
+<button onclick="openCamera('kid')" class="camera-btn">📸 Foto Niño</button>
 <img id="kidPreview" class="preview hidden">
 
-<h4>Adultos</h4>
+<h4>Adultos Autorizados</h4>
 <div id="adultsContainer"></div>
 <button onclick="addAdult()">+ Adulto</button>
 
-<button onclick="saveAll()">Guardar Todo</button>
+<button onclick="saveAll()">Guardar Registro</button>
 </div>
 
 <div class="card">
 <h3>Lista</h3>
 <div id="list"></div>
+
+<div class="pagination">
+<button onclick="prevPage()">⬅</button>
+<span id="pageInfo"></span>
+<button onclick="nextPage()">➡</button>
 </div>
 
 </div>
 
-<!-- CAMERA -->
+</div>
+
 <video id="camera" autoplay class="hidden"></video>
 <button id="captureBtn" class="hidden">Capturar</button>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbx-PFpJ7Llnw-YVW1O1Z-PhW_kNiwGo4m_MF5me6FN4VF7WzizEjRAOMZHEAuydisaD/exec";
+const API="TU_API_AQUI";
 
 let stream;
-let currentType = null;
-let currentAdultContainer = null;
+let currentType=null;
+let currentAdultContainer=null;
 
-// 📸 ABRIR CÁMARA
+let allData=[];
+let currentPage=1;
+const perPage=10;
+
+// 📸 CAMARA TRASERA
 async function openCamera(type, btn=null){
 
-currentType = type;
+currentType=type;
 
-if(type === "adult"){
-  currentAdultContainer = btn.closest(".adult-form");
+if(type==="adult"){
+currentAdultContainer=btn.closest(".adult-form");
 }
 
-stream = await navigator.mediaDevices.getUserMedia({ video: true });
+stream=await navigator.mediaDevices.getUserMedia({
+video:{facingMode:"environment"} // 🔥 cámara trasera
+});
 
-const video = document.getElementById("camera");
-video.srcObject = stream;
-video.classList.remove("hidden");
-
-document.getElementById("captureBtn").classList.remove("hidden");
+camera.srcObject=stream;
+camera.classList.remove("hidden");
+captureBtn.classList.remove("hidden");
 }
 
-// 📸 CAPTURAR FOTO
-document.getElementById("captureBtn").onclick = function(){
+// CAPTURA
+captureBtn.onclick=function(){
 
-const video = document.getElementById("camera");
+const canvas=document.createElement("canvas");
+canvas.width=camera.videoWidth;
+canvas.height=camera.videoHeight;
 
-const canvas = document.createElement("canvas");
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
+const ctx=canvas.getContext("2d");
+ctx.drawImage(camera,0,0);
 
-const ctx = canvas.getContext("2d");
-ctx.drawImage(video,0,0);
+const base64=canvas.toDataURL("image/png");
 
-const base64 = canvas.toDataURL("image/png");
+stream.getTracks().forEach(t=>t.stop());
+camera.classList.add("hidden");
+captureBtn.classList.add("hidden");
 
-// apagar cámara
-stream.getTracks().forEach(track=>track.stop());
-video.classList.add("hidden");
-this.classList.add("hidden");
-
-// 🔥 GUARDAR SEGÚN TIPO
-if(currentType === "kid"){
-
-const img = document.getElementById("kidPreview");
-img.src = base64;
+if(currentType==="kid"){
+kidPreview.src=base64;
+kidPreview.classList.remove("hidden");
+kidPreview.dataset.img=base64;
+}else{
+const img=currentAdultContainer.querySelector(".preview");
+img.src=base64;
 img.classList.remove("hidden");
-img.dataset.img = base64;
-
-}else if(currentType === "adult" && currentAdultContainer){
-
-const img = currentAdultContainer.querySelector(".preview");
-img.src = base64;
-img.classList.remove("hidden");
-img.dataset.img = base64;
-
+img.dataset.img=base64;
 }
 };
 
 // LOGIN
 async function login(){
 
-const fd = new URLSearchParams();
+const fd=new URLSearchParams();
 fd.append("action","login");
-fd.append("username",document.getElementById("user").value);
-fd.append("password",document.getElementById("pass").value);
+fd.append("username",user.value);
+fd.append("password",pass.value);
 
-const r = await fetch(API,{method:"POST",body:fd});
-const d = await r.json();
+const r=await fetch(API,{method:"POST",body:fd});
+const d=await r.json();
 
 if(d.success){
-document.getElementById("loginView").classList.add("hidden");
-document.getElementById("appView").classList.remove("hidden");
-document.getElementById("logoutBtn").classList.remove("hidden");
+loginView.classList.add("hidden");
+appView.classList.remove("hidden");
+logoutBtn.classList.remove("hidden");
 load();
-}else{
-alert("Login incorrecto");
-}
+}else alert("Login incorrecto");
 }
 
 // LOGOUT
-function logout(){
-location.reload();
-}
+function logout(){location.reload();}
 
-// 👨‍👩‍👧 ADULTOS
+// ADULTOS
 function addAdult(){
 
 const div=document.createElement("div");
@@ -152,19 +149,17 @@ div.className="card adult-form";
 div.innerHTML=`
 <input placeholder="Nombre" class="name">
 <input placeholder="Teléfono" class="phone">
-
-<button onclick="openCamera('adult', this)">📸 Tomar foto</button>
-
+<button onclick="openCamera('adult', this)">📸 Foto</button>
 <img class="preview hidden">
 `;
 
-document.getElementById("adultsContainer").appendChild(div);
+adultsContainer.appendChild(div);
 }
 
-// 💾 GUARDAR TODO
+// GUARDAR
 async function saveAll(){
 
-const kidPhoto=document.getElementById("kidPreview").dataset.img || "";
+const kidPhoto=kidPreview.dataset.img || "";
 
 const fdKid=new URLSearchParams();
 fdKid.append("action","addKid");
@@ -178,13 +173,11 @@ const blocks=document.querySelectorAll(".adult-form");
 
 for(let b of blocks){
 
-const photo = b.querySelector(".preview").dataset.img || "";
-
 const fdAdult=new URLSearchParams();
 fdAdult.append("action","addAdult");
 fdAdult.append("name",b.querySelector(".name").value);
 fdAdult.append("phone",b.querySelector(".phone").value);
-fdAdult.append("photo",photo);
+fdAdult.append("photo",b.querySelector(".preview").dataset.img || "");
 
 const aRes=await fetch(API,{method:"POST",body:fdAdult});
 const aData=await aRes.json();
@@ -197,18 +190,39 @@ fdRel.append("adult_id",aData.id);
 await fetch(API,{method:"POST",body:fdRel});
 }
 
-alert("Guardado");
+// 🔥 LIMPIAR FORM
+kidName.value="";
+kidPreview.src="";
+kidPreview.classList.add("hidden");
+delete kidPreview.dataset.img;
+
+adultsContainer.innerHTML="";
+
+alert("Registro guardado");
+
 load();
 }
 
-// 📊 LOAD
+// LOAD
 async function load(){
 
 const fd=new URLSearchParams();
 fd.append("action","getFullData");
 
 const r=await fetch(API,{method:"POST",body:fd});
-const data=await r.json();
+allData=await r.json();
+
+currentPage=1;
+render();
+}
+
+// RENDER PAGINADO
+function render(){
+
+const start=(currentPage-1)*perPage;
+const end=start+perPage;
+
+const data=allData.slice(start,end);
 
 let html="";
 
@@ -216,27 +230,43 @@ data.forEach(k=>{
 html+=`
 <div class="dashboard-card">
 
-  <div class="kid-section">
-    <img class="kid-photo" src="${k.photo}">
-    <div class="kid-name">${k.name}</div>
-  </div>
+<div class="kid-section">
+<img class="kid-photo" src="${k.photo}">
+<div class="kid-name">${k.name}</div>
+</div>
 
-  <div class="adults">
-    ${k.adults.map(a=>`
-      <div class="adult">
-        <img src="${a.photo}">
-        <div class="adult-name">${a.name}</div>
-      </div>
-    `).join("")}
-  </div>
+<div class="adults">
+${k.adults.map(a=>`
+<div class="adult">
+<img src="${a.photo}">
+<div class="adult-name">${a.name}</div>
+</div>
+`).join("")}
+</div>
 
 </div>
 `;
 });
 
 list.innerHTML=html;
+
+pageInfo.innerText=`Página ${currentPage} de ${Math.ceil(allData.length/perPage)}`;
 }
 
+// PAGINACION
+function nextPage(){
+if(currentPage*perPage<allData.length){
+currentPage++;
+render();
+}
+}
+
+function prevPage(){
+if(currentPage>1){
+currentPage--;
+render();
+}
+}
 </script>
 
 </body>
