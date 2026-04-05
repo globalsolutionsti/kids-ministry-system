@@ -159,17 +159,29 @@ const data = await r.json();
 let html="";
 
 data.forEach(k=>{
+
 html+=`
-<div class="card">
-<h3>${k.name}</h3>
-<img src="${k.photo}">
-<h4>Adultos:</h4>
-${k.adults.map(a=>`
-<p>${a.name}</p>
-<img src="${a.photo}">
-`).join("")}
+<div class="dashboard-card">
+
+  <div class="kid-info">
+    <h3>${k.name}</h3>
+
+    <div class="adults">
+      ${k.adults.map(a=>`
+        <div class="adult">
+          <img src="${a.photo}">
+          <div class="adult-name">${a.name}</div>
+        </div>
+      `).join("")}
+    </div>
+
+  </div>
+
+  <img class="kid-photo" src="${k.photo}">
+
 </div>
 `;
+
 });
 
 document.getElementById("list").innerHTML=html;
