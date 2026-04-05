@@ -12,13 +12,16 @@ header {
   text-align: center;
   font-weight: bold;
   position: relative;
+  font-size: 16px;
 }
 
 .logout-btn{
   position:absolute;
-  right:15px;
+  right:10px;
   top:10px;
   background:#ef4444;
+  padding:6px 10px;
+  font-size:12px;
 }
 
 /* LOGIN */
@@ -27,35 +30,43 @@ header {
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:15px;
 }
 
 .login-box{
   background:white;
-  padding:30px;
+  padding:25px;
   border-radius:15px;
   box-shadow:0 5px 20px rgba(0,0,0,0.1);
   text-align:center;
+  width:100%;
+  max-width:350px;
 }
 
 /* FORM */
 input{
-  margin:10px;
-  padding:10px;
-  width:250px;
+  margin:8px 0;
+  padding:12px;
+  width:100%;
   border-radius:8px;
   border:1px solid #ddd;
+  box-sizing:border-box;
 }
 
 button{
-  padding:10px;
+  padding:12px;
+  width:100%;
   background:#2563eb;
   color:white;
   border:none;
   border-radius:8px;
   cursor:pointer;
+  margin-top:8px;
 }
 
-.container{padding:20px}
+.container{
+  padding:15px;
+}
 
 .card{
   background:white;
@@ -70,10 +81,11 @@ button{
   justify-content:space-between;
   align-items:center;
   background:white;
-  padding:15px;
+  padding:12px;
   border-radius:15px;
   margin-bottom:10px;
   border-left:5px solid #3b82f6;
+  gap:10px;
 }
 
 .kid-section{
@@ -83,27 +95,32 @@ button{
 }
 
 .kid-photo{
-  width:70px;
-  height:70px;
+  width:60px;
+  height:60px;
   border-radius:10px;
   object-fit:cover;
 }
 
 .adults{
   display:flex;
-  gap:10px;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.adult{
+  text-align:center;
 }
 
 .adult img{
-  width:50px;
-  height:50px;
+  width:45px;
+  height:45px;
   border-radius:10px;
   object-fit:cover;
 }
 
 .adult-name{
-  font-size:11px;
-  text-align:center;
+  font-size:10px;
 }
 
 /* PAGINACION */
@@ -117,46 +134,47 @@ video{
   position:fixed;
   bottom:10px;
   right:10px;
-  width:200px;
+  width:150px;
   border-radius:10px;
+  z-index:999;
 }
 
 #captureBtn{
   position:fixed;
-  bottom:220px;
+  bottom:170px;
   right:10px;
+  z-index:999;
 }
 
 /* PREVIEW */
 .preview{
-  width:100px;
+  width:100%;
+  max-width:120px;
   border-radius:10px;
   margin-top:10px;
 }
 
-.hidden{display:none}
+.hidden{
+  display:none;
+}
 
-/* MENU RESPONSIVO PRO */
+/* MENU */
 .menu-grid{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap:20px;
-  padding:20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap:15px;
+  padding:15px;
 }
 
 .menu-card{
   background:white;
-  padding:40px 20px;
+  padding:30px 15px;
   border-radius:20px;
   text-align:center;
-  font-size:22px;
+  font-size:20px;
   cursor:pointer;
   box-shadow:0 8px 20px rgba(0,0,0,0.1);
   transition:0.3s;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
 }
 
 .menu-card:hover{
@@ -165,20 +183,58 @@ video{
 
 .menu-card h3{
   margin-top:10px;
-  font-size:18px;
+  font-size:16px;
 }
 
-/* 📱 MOBILE */
-@media (max-width:600px){
+/* 📱 MOBILE PRO */
+@media (max-width:768px){
+
+  header{
+    font-size:14px;
+    padding:12px;
+  }
+
+  .dashboard-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .kid-section{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  .adults{
+    width:100%;
+    justify-content:flex-start;
+  }
+
+  video{
+    width:120px;
+  }
+
+}
+
+/* 📱 EXTRA SMALL (celulares chicos) */
+@media (max-width:480px){
 
   .menu-grid{
     grid-template-columns:1fr;
-    padding:15px;
   }
 
   .menu-card{
-    padding:30px;
-    font-size:20px;
+    padding:25px;
+    font-size:18px;
+  }
+
+  .kid-photo{
+    width:55px;
+    height:55px;
+  }
+
+  .adult img{
+    width:40px;
+    height:40px;
   }
 
 }
