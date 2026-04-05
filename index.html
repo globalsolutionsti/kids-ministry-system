@@ -150,41 +150,45 @@ load();
 // CARGAR DATOS
 async function load(){
 
-const fd = new URLSearchParams();
-fd.append("action","getFullData");
+  const fd = new URLSearchParams();
+  fd.append("action","getFullData");
 
-const r = await fetch(API,{method:"POST",body:fd});
-const data = await r.json();
+  const r = await fetch(API,{
+    method:"POST",
+    body:fd
+  });
 
-let html="";
+  const data = await r.json();
 
-data.forEach(k=>{
+  let html = "";
 
-html+=`
-<div class="dashboard-card">
+  data.forEach(k => {
 
-  <!-- IZQUIERDA: ADULTOS -->
-  <div class="adults">
-    ${k.adults.map(a=>`
-      <div class="adult">
-        <img src="${a.photo}">
-        <div class="adult-name">${a.name}</div>
+    html += `
+    <div class="dashboard-card">
+
+      <!-- IZQUIERDA: ADULTOS -->
+      <div class="adults">
+        ${k.adults.map(a => `
+          <div class="adult">
+            <img src="${a.photo}">
+            <div class="adult-name">${a.name}</div>
+          </div>
+        `).join("")}
       </div>
-    `).join("")}
-  </div>
 
-  <!-- DERECHA: NIÑO -->
-  <div class="kid-section">
-    <div class="kid-name">${k.name}</div>
-    <img class="kid-photo" src="${k.photo}">
-  </div>
+      <!-- DERECHA: NIÑO -->
+      <div class="kid-section">
+        <div class="kid-name">${k.name}</div>
+        <img class="kid-photo" src="${k.photo}">
+      </div>
 
-</div>
-`;
+    </div>
+    `;
 
-});
+  });
 
-document.getElementById("list").innerHTML=html;
+  document.getElementById("list").innerHTML = html;
 }
 </script>
 
