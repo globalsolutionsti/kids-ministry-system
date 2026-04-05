@@ -12,8 +12,8 @@
 <body>
 
 <header>
-  Amistad Fuertes Kids
-  <button onclick="logout()" class="logout-btn">Salir</button>
+Amistad Fuertes Kids
+<button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Salir</button>
 </header>
 
 <!-- LOGIN -->
@@ -54,7 +54,7 @@
 <button id="captureBtn" class="hidden">Capturar</button>
 
 <script>
-const API="TU_API_AQUI";
+const API="https://script.google.com/macros/s/AKfycbx-PFpJ7Llnw-YVW1O1Z-PhW_kNiwGo4m_MF5me6FN4VF7WzizEjRAOMZHEAuydisaD/exec";
 let currentTarget = "";
 let stream;
 
@@ -99,19 +99,26 @@ last.dataset.img=base64;
 
 // LOGIN
 async function login(){
-const fd=new URLSearchParams();
-fd.append("action","login");
-fd.append("username",user.value);
-fd.append("password",pass.value);
 
-const r=await fetch(API,{method:"POST",body:fd});
-const d=await r.json();
+const fd = new URLSearchParams();
+fd.append("action","login");
+fd.append("username",document.getElementById("user").value);
+fd.append("password",document.getElementById("pass").value);
+
+const r = await fetch(API,{method:"POST",body:fd});
+const d = await r.json();
 
 if(d.success){
-loginView.classList.add("hidden");
-appView.classList.remove("hidden");
+document.getElementById("loginView").classList.add("hidden");
+document.getElementById("appView").classList.remove("hidden");
+
+// 👇 mostrar botón salir SOLO dentro del sistema
+document.getElementById("logoutBtn").classList.remove("hidden");
+
 load();
-}else alert("Error");
+}else{
+alert("Login incorrecto");
+}
 }
 
 // LOGOUT
@@ -207,6 +214,11 @@ html+=`
 
 list.innerHTML=html;
 }
+
+function logout(){
+location.reload();
+}
+  
 </script>
 
 </body>
