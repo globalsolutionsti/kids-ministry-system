@@ -5,16 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kids Ministry Pro</title>
 
+<!-- ✅ IMPORTANTE: ahora sí usamos el CSS externo -->
+<link rel="stylesheet" href="styles.css">
+
 <style>
-body{font-family:Arial;margin:0;background:#f4f6f9}
 header{background:#1e3a8a;color:white;padding:15px;text-align:center}
 .container{padding:20px}
 .card{background:white;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
-input,button{padding:10px;margin:5px;width:100%;border-radius:10px;border:1px solid #ddd}
-button{background:#2563eb;color:white;border:none}
-img{width:100%;border-radius:10px}
-.hidden{display:none}
 </style>
+
 </head>
 
 <body>
@@ -66,12 +65,12 @@ reader.readAsDataURL(file);
 // LOGIN
 async function login(){
 
-const formData = new URLSearchParams();
-formData.append("action","login");
-formData.append("username",document.getElementById("user").value);
-formData.append("password",document.getElementById("pass").value);
+const fd = new URLSearchParams();
+fd.append("action","login");
+fd.append("username",document.getElementById("user").value);
+fd.append("password",document.getElementById("pass").value);
 
-const r = await fetch(API,{method:"POST",body:formData});
+const r = await fetch(API,{method:"POST",body:fd});
 const d = await r.json();
 
 if(d.success){
@@ -101,10 +100,8 @@ document.getElementById("adultsContainer").appendChild(div);
 async function saveAll(){
 
 const name=document.getElementById("kidName").value;
-const kidFile=document.getElementById("kidPhoto").files[0];
-const kidPhoto=await toBase64(kidFile);
+const kidPhoto=await toBase64(document.getElementById("kidPhoto").files[0]);
 
-// GUARDAR NIÑO
 const fdKid = new URLSearchParams();
 fdKid.append("action","addKid");
 fdKid.append("name",name);
@@ -114,81 +111,69 @@ const kidRes = await fetch(API,{method:"POST",body:fdKid});
 const kidData = await kidRes.json();
 const kidId = kidData.id;
 
-// ADULTOS
 const blocks=document.querySelectorAll("#adultsContainer .card");
 
 for(let b of blocks){
 
-const aName=b.querySelector(".name").value;
-const aPhone=b.querySelector(".phone").value;
-const file=b.querySelector(".photo").files[0];
-const photo=await toBase64(file);
+const photo=await toBase64(b.querySelector(".photo").files[0]);
 
 const fdAdult = new URLSearchParams();
 fdAdult.append("action","addAdult");
-fdAdult.append("name",aName);
-fdAdult.append("phone",aPhone);
+fdAdult.append("name",b.querySelector(".name").value);
+fdAdult.append("phone",b.querySelector(".phone").value);
 fdAdult.append("photo",photo);
 
 const aRes = await fetch(API,{method:"POST",body:fdAdult});
 const aData = await aRes.json();
 
-// RELACION
 const fdRel = new URLSearchParams();
 fdRel.append("action","linkAdultToKid");
 fdRel.append("kid_id",kidId);
 fdRel.append("adult_id",aData.id);
 
 await fetch(API,{method:"POST",body:fdRel});
-
 }
 
 alert("Guardado completo");
 load();
 }
 
-// CARGAR DATOS
+// LOAD DASHBOARD PRO
 async function load(){
 
-  const fd = new URLSearchParams();
-  fd.append("action","getFullData");
+const fd = new URLSearchParams();
+fd.append("action","getFullData");
 
-  const r = await fetch(API,{
-    method:"POST",
-    body:fd
-  });
+const r = await fetch(API,{method:"POST",body:fd});
+const data = await r.json();
 
-  const data = await r.json();
+let html = "";
 
-  let html = "";
+data.forEach(k => {
 
-  data.forEach(k => {
+html += `
+<div class="dashboard-card">
 
-    html += `
-    <div class="dashboard-card">
-
-      <!-- IZQUIERDA: ADULTOS -->
-      <div class="adults">
-        ${k.adults.map(a => `
-          <div class="adult">
-            <img src="${a.photo}">
-            <div class="adult-name">${a.name}</div>
-          </div>
-        `).join("")}
+  <div class="adults">
+    ${k.adults.map(a => `
+      <div class="adult">
+        <img src="${a.photo}">
+        <div class="adult-name">${a.name}</div>
       </div>
+    `).join("")}
+  </div>
 
-      <!-- DERECHA: NIÑO -->
-      <div class="kid-section">
-        <div class="kid-name">${k.name}</div>
-        <img class="kid-photo" src="${k.photo}">
-      </div>
+  <div class="kid-section">
+    <div class="kid-name">${k.name}</div>
+    <img class="kid-photo" src="${k.photo}">
+  </div>
 
-    </div>
-    `;
+</div>
+`;
 
-  });
+});
 
-  document.getElementById("list").innerHTML = html;
+document.getElementById("list").innerHTML = html;
 }
 </script>
 
