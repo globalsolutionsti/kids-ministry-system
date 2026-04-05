@@ -83,8 +83,6 @@ button{
   display:inline-block;
 }
 
-/* ✅ SOLO BOTONES PRINCIPALES FULL WIDTH */
-
 /* CONTENEDOR */
 .container{
   padding:15px;
@@ -95,6 +93,11 @@ button{
   padding:15px;
   border-radius:15px;
   margin-bottom:15px;
+
+  /* 👇 mejora visual de botones */
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
 /* DASHBOARD */
@@ -235,7 +238,7 @@ video{
     width:120px;
   }
 
-  /* BOTON SALIR MOVIL PEQUEÑO */
+  /* BOTON SALIR MOVIL */
   .logout-btn{
     position:fixed;
     bottom:15px;
@@ -274,31 +277,35 @@ video{
   }
 
 }
+
 /* 🎯 TIPOS DE BOTONES */
 
-/* BOTON PRINCIPAL (GRANDE) */
+/* ✅ BOTON PRINCIPAL (YA NO GIGANTE) */
 .btn-main{
-  width:100%;
-  display:block;
+  width:auto;
+  display:inline-block;
+  padding:10px 16px;
+  font-size:14px;
+  border-radius:10px;
 }
 
-/* BOTON SECUNDARIO (PEQUEÑO) */
+/* BOTON SECUNDARIO */
 .btn-secondary{
   width:auto;
   display:inline-block;
   padding:8px 12px;
   font-size:13px;
-}
-
-/* BOTON CAMARA (MEDIO) */
-.camera-btn{
-  width:100%;
-}
-.btn-secondary{
   background:#e5e7eb;
   color:#111;
 }
 
 .btn-secondary:hover{
   background:#d1d5db;
+}
+
+/* BOTON CAMARA */
+.camera-btn{
+  width:auto;
+  display:inline-block;
+  padding:10px 16px;
 }
