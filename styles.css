@@ -84,10 +84,6 @@ button{
 }
 
 /* ✅ SOLO BOTONES PRINCIPALES FULL WIDTH */
-.card button,
-.login-box button{
-  width:100%;
-}
 
 /* CONTENEDOR */
 .container{
@@ -277,4 +273,24 @@ video{
     height:40px;
   }
 
+}
+/* 🎯 TIPOS DE BOTONES */
+
+/* BOTON PRINCIPAL (GRANDE) */
+.btn-main{
+  width:100%;
+  display:block;
+}
+
+/* BOTON SECUNDARIO (PEQUEÑO) */
+.btn-secondary{
+  width:auto;
+  display:inline-block;
+  padding:8px 12px;
+  font-size:13px;
+}
+
+/* BOTON CAMARA (MEDIO) */
+.camera-btn{
+  width:100%;
 }
