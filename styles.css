@@ -15,13 +15,23 @@ header {
   font-size: 16px;
 }
 
+/* ✅ BOTON SALIR LIMPIO */
 .logout-btn{
   position:absolute;
   right:10px;
   top:10px;
   background:#ef4444;
-  padding:6px 10px;
+  color:white;
+  border:none;
+  padding:6px 12px;
   font-size:12px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.logout-btn:hover{
+  background:#dc2626;
 }
 
 /* LOGIN */
@@ -213,9 +223,27 @@ video{
     width:120px;
   }
 
+  /* ✅ BOTON SALIR MOVIL (PEQUEÑO Y LIMPIO) */
+  .logout-btn{
+    position:fixed;
+    bottom:15px;
+    right:15px;
+    top:auto;
+
+    padding:8px 14px;
+    font-size:13px;
+    border-radius:20px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .logout-btn:active{
+    transform:scale(0.95);
+  }
+
 }
 
-/* 📱 EXTRA SMALL (celulares chicos) */
+/* 📱 EXTRA SMALL */
 @media (max-width:480px){
 
   .menu-grid{
@@ -237,79 +265,4 @@ video{
     height:40px;
   }
 
-}
-
-
-/* 📱 BOTON SALIR RESPONSIVE */
-@media (max-width:768px){
-
-  .logout-btn{
-    position:fixed;
-    bottom:15px;
-    right:15px;
-    top:auto;
-    background:#ef4444;
-    padding:12px 15px;
-    font-size:14px;
-    border-radius:50px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
-    z-index:999;
-  }
-
-}
-
-/* 🔥 BOTON PRO ANIMADO */
-.logout-btn{
-  position:absolute;
-  right:15px;
-  top:10px;
-  background:#ef4444;
-  color:white;
-  border:none;
-  cursor:pointer;
-  transition:all 0.3s ease;
-}
-
-/* 📱 MODO APP */
-@media (max-width:768px){
-
-  .logout-btn{
-    position:fixed !important;
-    bottom:20px;
-    right:20px;
-    top:auto;
-    
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    
-    font-size:22px;
-    
-    box-shadow:0 10px 25px rgba(0,0,0,0.3);
-    
-    animation:fadeInUp 0.5s ease;
-  }
-
-  /* 👆 EFECTO AL TOCAR */
-  .logout-btn:active{
-    transform:scale(0.9);
-    box-shadow:0 5px 10px rgba(0,0,0,0.2);
-  }
-
-}
-
-/* ✨ ANIMACION ENTRADA */
-@keyframes fadeInUp{
-  from{
-    opacity:0;
-    transform:translateY(30px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
 }
