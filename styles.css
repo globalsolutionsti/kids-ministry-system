@@ -135,3 +135,26 @@ video{
 }
 
 .hidden{display:none}
+
+/* MENU */
+.menu-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+padding:20px;
+}
+
+.menu-card{
+background:white;
+padding:30px;
+border-radius:15px;
+text-align:center;
+font-size:30px;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.menu-card:hover{
+transform:scale(1.05);
+}
