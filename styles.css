@@ -15,24 +15,25 @@ header {
   font-size: 16px;
 }
 
-/* 🔥 BOTON SALIR PROFESIONAL (FIX DEFINITIVO) */
+/* ✅ BOTON SALIR PROFESIONAL */
 .logout-btn{
   position:absolute;
   right:10px;
   top:10px;
 
-  width:auto !important; /* 🔥 rompe el width global */
-  
   background:#ef4444;
   color:white;
   border:none;
 
-  padding:6px 12px;
+  padding:5px 10px;
   font-size:12px;
   border-radius:6px;
 
   cursor:pointer;
   transition:0.2s;
+
+  width:auto !important;
+  display:inline-block;
 }
 
 .logout-btn:hover{
@@ -68,17 +69,27 @@ input{
   box-sizing:border-box;
 }
 
+/* 🔥 BOTONES BASE (YA NO FULL WIDTH) */
 button{
-  padding:12px;
-  width:100%; /* SOLO botones normales */
+  padding:10px 14px;
   background:#2563eb;
   color:white;
   border:none;
   border-radius:8px;
   cursor:pointer;
   margin-top:8px;
+
+  width:auto;
+  display:inline-block;
 }
 
+/* ✅ SOLO BOTONES PRINCIPALES FULL WIDTH */
+.card button,
+.login-box button{
+  width:100%;
+}
+
+/* CONTENEDOR */
 .container{
   padding:15px;
 }
@@ -201,7 +212,7 @@ video{
   font-size:16px;
 }
 
-/* 📱 MOBILE PRO */
+/* 📱 MOBILE */
 @media (max-width:768px){
 
   header{
@@ -228,30 +239,23 @@ video{
     width:120px;
   }
 
-  /* 🔥 BOTON SALIR MOVIL LIMPIO */
+  /* BOTON SALIR MOVIL PEQUEÑO */
   .logout-btn{
     position:fixed;
     bottom:15px;
     right:15px;
     top:auto;
 
-    width:auto !important;
-
-    padding:8px 12px;
+    padding:6px 10px;
     font-size:12px;
 
-    border-radius:15px;
-
+    border-radius:12px;
     box-shadow:0 3px 8px rgba(0,0,0,0.15);
-  }
-
-  .logout-btn:active{
-    transform:scale(0.95);
   }
 
 }
 
-/* 📱 EXTRA SMALL */
+/* EXTRA SMALL */
 @media (max-width:480px){
 
   .menu-grid{
