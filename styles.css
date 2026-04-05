@@ -294,3 +294,11 @@ video{
 .camera-btn{
   width:100%;
 }
+.btn-secondary{
+  background:#e5e7eb;
+  color:#111;
+}
+
+.btn-secondary:hover{
+  background:#d1d5db;
+}
