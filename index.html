@@ -26,8 +26,32 @@ Ministerio Kids - Gestión de Niños (as)
   </div>
 </div>
 
-<!-- APP -->
-<div class="container hidden" id="appView">
+<!-- MENU -->
+<div class="container hidden" id="menuView">
+  <div class="menu-grid">
+
+    <div class="menu-card" onclick="openView('catalogView')">
+      📋
+      <h3>Catálogo de Niños</h3>
+    </div>
+
+    <div class="menu-card" onclick="openView('checkinView')">
+      🟢
+      <h3>Entrada</h3>
+    </div>
+
+    <div class="menu-card" onclick="openView('checkoutView')">
+      🔐
+      <h3>Salida</h3>
+    </div>
+
+  </div>
+</div>
+
+<!-- CATALOGO (TU SISTEMA ACTUAL) -->
+<div class="container hidden" id="catalogView">
+
+<button onclick="goMenu()">⬅ Volver</button>
 
 <div class="card">
 <h3>Registrar Niño</h3>
@@ -58,6 +82,25 @@ Ministerio Kids - Gestión de Niños (as)
 
 </div>
 
+<!-- CHECK-IN -->
+<div class="container hidden" id="checkinView">
+<button onclick="goMenu()">⬅ Volver</button>
+<div class="card">
+<h3>Entrada de Niño</h3>
+<p>🚧 Aquí haremos el check-in en la Fase 2</p>
+</div>
+</div>
+
+<!-- CHECK-OUT -->
+<div class="container hidden" id="checkoutView">
+<button onclick="goMenu()">⬅ Volver</button>
+<div class="card">
+<h3>Salida / Entrega</h3>
+<p>🚧 Aquí haremos la validación en la Fase 2</p>
+</div>
+</div>
+
+<!-- CAMERA -->
 <video id="camera" autoplay class="hidden"></video>
 <button id="captureBtn" class="hidden">Capturar</button>
 
@@ -72,7 +115,26 @@ let allData=[];
 let currentPage=1;
 const perPage=10;
 
-// 📸 CAMARA TRASERA
+// 🔥 NAVEGACIÓN
+function openView(view){
+menuView.classList.add("hidden");
+catalogView.classList.add("hidden");
+checkinView.classList.add("hidden");
+checkoutView.classList.add("hidden");
+
+document.getElementById(view).classList.remove("hidden");
+
+if(view==="catalogView") load();
+}
+
+function goMenu(){
+menuView.classList.remove("hidden");
+catalogView.classList.add("hidden");
+checkinView.classList.add("hidden");
+checkoutView.classList.add("hidden");
+}
+
+// 📸 CAMARA
 async function openCamera(type, btn=null){
 
 currentType=type;
@@ -82,7 +144,7 @@ currentAdultContainer=btn.closest(".adult-form");
 }
 
 stream=await navigator.mediaDevices.getUserMedia({
-video:{facingMode:"environment"} // 🔥 cámara trasera
+video:{facingMode:"environment"}
 });
 
 camera.srcObject=stream;
@@ -131,9 +193,8 @@ const d=await r.json();
 
 if(d.success){
 loginView.classList.add("hidden");
-appView.classList.remove("hidden");
+menuView.classList.remove("hidden");
 logoutBtn.classList.remove("hidden");
-load();
 }else alert("Login incorrecto");
 }
 
@@ -190,12 +251,11 @@ fdRel.append("adult_id",aData.id);
 await fetch(API,{method:"POST",body:fdRel});
 }
 
-// 🔥 LIMPIAR FORM
+// LIMPIAR
 kidName.value="";
 kidPreview.src="";
 kidPreview.classList.add("hidden");
 delete kidPreview.dataset.img;
-
 adultsContainer.innerHTML="";
 
 alert("Registro guardado");
@@ -216,7 +276,7 @@ currentPage=1;
 render();
 }
 
-// RENDER PAGINADO
+// RENDER
 function render(){
 
 const start=(currentPage-1)*perPage;
