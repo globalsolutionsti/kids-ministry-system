@@ -15,7 +15,7 @@ header {
   font-size: 16px;
 }
 
-/* ✅ BOTON SALIR PROFESIONAL */
+/* BOTON SALIR */
 .logout-btn{
   position:absolute;
   right:10px;
@@ -69,9 +69,9 @@ input{
   box-sizing:border-box;
 }
 
-/* 🔥 BOTONES BASE (PROFESIONAL) */
+/* BOTONES BASE */
 button{
-  padding:8px 14px;
+  padding:8px 12px;
   background:#2563eb;
   color:white;
   border:none;
@@ -80,10 +80,14 @@ button{
   margin-top:6px;
 
   width:auto;
-  display:inline-block;
+  display:inline-flex; /* 🔥 clave */
+  align-items:center;
+  justify-content:center;
 
   font-size:13px;
   line-height:1.2;
+
+  max-width:max-content; /* 🔥 evita que crezcan */
 }
 
 /* CONTENEDOR */
@@ -100,6 +104,8 @@ button{
   display:flex;
   flex-direction:column;
   gap:10px;
+
+  align-items:flex-start; /* 🔥 FIX REAL */
 }
 
 /* DASHBOARD */
@@ -213,7 +219,7 @@ video{
   font-size:16px;
 }
 
-/* 📱 MOBILE */
+/* MOBILE */
 @media (max-width:768px){
 
   header{
@@ -240,7 +246,6 @@ video{
     width:120px;
   }
 
-  /* BOTON SALIR MOVIL */
   .logout-btn{
     position:fixed;
     bottom:15px;
@@ -280,23 +285,16 @@ video{
 
 }
 
-/* 🎯 BOTONES PROFESIONALES */
+/* BOTONES PRO */
 
-/* 🔥 BOTON PRINCIPAL (YA NO GIGANTE) */
+/* PRINCIPAL */
 .btn-main{
-  width:auto !important;
-  display:inline-block !important;
-
   padding:8px 14px;
   font-size:13px;
-
-  align-self:flex-start; /* 👈 clave para que no se estire */
 }
 
-/* BOTON SECUNDARIO */
+/* SECUNDARIO */
 .btn-secondary{
-  width:auto;
-  display:inline-block;
   padding:6px 12px;
   font-size:12px;
   background:#e5e7eb;
@@ -307,13 +305,8 @@ video{
   background:#d1d5db;
 }
 
-/* BOTON CAMARA */
+/* CAMARA */
 .camera-btn{
-  width:auto !important;
-  display:inline-block !important;
-
   padding:8px 14px;
   font-size:13px;
-
-  align-self:flex-start;
 }
