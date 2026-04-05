@@ -51,21 +51,21 @@ Ministerio Kids - Gestión de Niños (as)
 <!-- CATALOGO (TU SISTEMA ACTUAL) -->
 <div class="container hidden" id="catalogView">
 
-<button onclick="goMenu()">⬅ Volver</button>
+<button onclick="goMenu()" class="btn-secondary">⬅ Volver</button>
 
 <div class="card">
 <h3>Registrar Niño</h3>
 
 <input id="kidName" placeholder="Nombre del niño">
 
-<button onclick="openCamera('kid')" class="camera-btn">📸 Foto Niño</button>
+<button onclick="openCamera('kid')" class="camera-btn btn-main">📸 Foto Niño</button>
 <img id="kidPreview" class="preview hidden">
 
 <h4>Adultos Autorizados</h4>
 <div id="adultsContainer"></div>
-<button onclick="addAdult()">+ Adulto</button>
+<button onclick="addAdult()" class="btn-secondary">+ Adulto</button>
 
-<button onclick="saveAll()">Guardar Registro</button>
+<button onclick="saveAll()" class="btn-main">Guardar Registro</button>
 </div>
 
 <div class="card">
