@@ -51,18 +51,25 @@ Amistad Fuertes Kids
 
 </div>
 
-<!-- VIDEO CAMERA -->
+<!-- CAMERA -->
 <video id="camera" autoplay class="hidden"></video>
 <button id="captureBtn" class="hidden">Capturar</button>
 
 <script>
 const API="https://script.google.com/macros/s/AKfycbx-PFpJ7Llnw-YVW1O1Z-PhW_kNiwGo4m_MF5me6FN4VF7WzizEjRAOMZHEAuydisaD/exec";
-let currentElement = null;
+
 let stream;
+let currentType = null;
+let currentAdultContainer = null;
 
-async function openCamera(btn){
+// 📸 ABRIR CÁMARA
+async function openCamera(type, btn=null){
 
-currentElement = btn; // 👈 guardamos el botón del adulto
+currentType = type;
+
+if(type === "adult"){
+  currentAdultContainer = btn.closest(".adult-form");
+}
 
 stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
@@ -73,8 +80,11 @@ video.classList.remove("hidden");
 document.getElementById("captureBtn").classList.remove("hidden");
 }
 
+// 📸 CAPTURAR FOTO
 document.getElementById("captureBtn").onclick = function(){
+
 const video = document.getElementById("camera");
+
 const canvas = document.createElement("canvas");
 canvas.width = video.videoWidth;
 canvas.height = video.videoHeight;
@@ -84,19 +94,26 @@ ctx.drawImage(video,0,0);
 
 const base64 = canvas.toDataURL("image/png");
 
+// apagar cámara
 stream.getTracks().forEach(track=>track.stop());
 video.classList.add("hidden");
 this.classList.add("hidden");
 
-// GUARDAR PREVIEW
-if(currentTarget==="kid"){
-document.getElementById("kidPreview").src=base64;
-document.getElementById("kidPreview").classList.remove("hidden");
-document.getElementById("kidPreview").dataset.img=base64;
-}else{
-const last=document.querySelector(".adult:last-child img");
-last.src=base64;
-last.dataset.img=base64;
+// 🔥 GUARDAR SEGÚN TIPO
+if(currentType === "kid"){
+
+const img = document.getElementById("kidPreview");
+img.src = base64;
+img.classList.remove("hidden");
+img.dataset.img = base64;
+
+}else if(currentType === "adult" && currentAdultContainer){
+
+const img = currentAdultContainer.querySelector(".preview");
+img.src = base64;
+img.classList.remove("hidden");
+img.dataset.img = base64;
+
 }
 };
 
@@ -114,10 +131,7 @@ const d = await r.json();
 if(d.success){
 document.getElementById("loginView").classList.add("hidden");
 document.getElementById("appView").classList.remove("hidden");
-
-// 👇 mostrar botón salir SOLO dentro del sistema
 document.getElementById("logoutBtn").classList.remove("hidden");
-
 load();
 }else{
 alert("Login incorrecto");
@@ -129,7 +143,7 @@ function logout(){
 location.reload();
 }
 
-// ADULTOS
+// 👨‍👩‍👧 ADULTOS
 function addAdult(){
 
 const div=document.createElement("div");
@@ -139,7 +153,7 @@ div.innerHTML=`
 <input placeholder="Nombre" class="name">
 <input placeholder="Teléfono" class="phone">
 
-<button onclick="openCamera(this)">📸 Foto</button>
+<button onclick="openCamera('adult', this)">📸 Tomar foto</button>
 
 <img class="preview hidden">
 `;
@@ -147,7 +161,7 @@ div.innerHTML=`
 document.getElementById("adultsContainer").appendChild(div);
 }
 
-// GUARDAR
+// 💾 GUARDAR TODO
 async function saveAll(){
 
 const kidPhoto=document.getElementById("kidPreview").dataset.img || "";
@@ -164,11 +178,13 @@ const blocks=document.querySelectorAll(".adult-form");
 
 for(let b of blocks){
 
+const photo = b.querySelector(".preview").dataset.img || "";
+
 const fdAdult=new URLSearchParams();
 fdAdult.append("action","addAdult");
 fdAdult.append("name",b.querySelector(".name").value);
 fdAdult.append("phone",b.querySelector(".phone").value);
-fdAdult.append("photo",b.querySelector("img").dataset.img || "");
+fdAdult.append("photo",photo);
 
 const aRes=await fetch(API,{method:"POST",body:fdAdult});
 const aData=await aRes.json();
@@ -185,7 +201,7 @@ alert("Guardado");
 load();
 }
 
-// LOAD
+// 📊 LOAD
 async function load(){
 
 const fd=new URLSearchParams();
@@ -221,10 +237,6 @@ html+=`
 list.innerHTML=html;
 }
 
-function logout(){
-location.reload();
-}
-  
 </script>
 
 </body>
