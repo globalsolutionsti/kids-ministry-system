@@ -1,11 +1,14 @@
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   background: #f4f6f9;
-  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
+/* LOGIN */
 .login-container {
   margin-top: 100px;
+  text-align: center;
 }
 
 input {
@@ -13,6 +16,8 @@ input {
   margin: 10px auto;
   padding: 10px;
   width: 250px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 button {
@@ -21,55 +26,86 @@ button {
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #1a5edb;
 }
 
 .hidden {
   display: none;
 }
-.dashboard-card{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:white;
-border-radius:15px;
-padding:15px;
-margin:10px 0;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+/* 🔥 DASHBOARD PROFESIONAL */
+.dashboard-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  gap: 20px;
+  border-left: 5px solid #2c7be5;
 }
 
-.kid-info{
-flex:2;
+/* IZQUIERDA (ADULTOS) */
+.adults {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex: 2;
 }
 
-.kid-photo{
-width:80px;
-height:80px;
-object-fit:cover;
-border-radius:10px;
+.adult {
+  text-align: center;
 }
 
-.adults{
-display:flex;
-gap:10px;
-margin-top:10px;
-flex-wrap:wrap;
+.adult img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: auto;
 }
 
-.adult{
-text-align:center;
+.adult-name {
+  font-size: 11px;
+  margin-top: 3px;
 }
 
-.adult img{
-width:50px;
-height:50px;
-border-radius:50%;
-object-fit:cover;
-display:block;
-margin:auto;
+/* DERECHA (NIÑO) */
+.kid-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.adult-name{
-font-size:12px;
+.kid-name {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: right;
 }
 
-v
+.kid-photo {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* RESPONSIVE 📱 */
+@media (max-width: 600px) {
+  .dashboard-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kid-section {
+    margin-top: 10px;
+  }
+}
