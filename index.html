@@ -51,50 +51,39 @@ img{width:100%;border-radius:10px}
 </div>
 
 <script>
-const API="https://script.google.com/macros/s/AKfycbwfTm07nOxZbUuK_Eq-kUKhym_RwP2FK05p_G1C7Zyu6kUuUQYvr-PE5uMSeE3FT_co/exec";
+const API="https://script.google.com/macros/s/AKfycbxZ1OZsVweXyrHSBFZAureuG4LI45UYLC67yNxRIaoYH8G1eYcTl2yhqzs-yvN8WJ4V/exec";
 
 // BASE64
 function toBase64(file){
-return new Promise((res,rej)=>{
+return new Promise((res)=>{
 if(!file) return res("");
 const reader=new FileReader();
 reader.onload=()=>res(reader.result);
-reader.onerror=err=>rej(err);
 reader.readAsDataURL(file);
 });
 }
 
 // LOGIN
 async function login(){
-try{
 
 const formData = new URLSearchParams();
 formData.append("action","login");
 formData.append("username",document.getElementById("user").value);
 formData.append("password",document.getElementById("pass").value);
 
-const r = await fetch(API,{
-  method:"POST",
-  body:formData
-});
-
+const r = await fetch(API,{method:"POST",body:formData});
 const d = await r.json();
 
 if(d.success){
-  document.getElementById("loginView").classList.add("hidden");
-  document.getElementById("appView").classList.remove("hidden");
-  load();
+document.getElementById("loginView").classList.add("hidden");
+document.getElementById("appView").classList.remove("hidden");
+load();
 }else{
-  alert("Login incorrecto");
-}
-
-}catch(e){
-console.log(e);
-alert("Error conexión");
+alert("Login incorrecto");
 }
 }
 
-// AGREGAR ADULTO UI
+// UI ADULTOS
 function addAdult(){
 const div=document.createElement("div");
 div.className="card";
@@ -110,25 +99,20 @@ document.getElementById("adultsContainer").appendChild(div);
 
 // GUARDAR TODO
 async function saveAll(){
-try{
 
 const name=document.getElementById("kidName").value;
 const kidFile=document.getElementById("kidPhoto").files[0];
 const kidPhoto=await toBase64(kidFile);
 
 // GUARDAR NIÑO
-const kidRes=await fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-action:"addKid",
-name,
-photo:kidPhoto
-})
-});
+const fdKid = new URLSearchParams();
+fdKid.append("action","addKid");
+fdKid.append("name",name);
+fdKid.append("photo",kidPhoto);
 
-const kidData=await kidRes.json();
-const kidId=kidData.id;
+const kidRes = await fetch(API,{method:"POST",body:fdKid});
+const kidData = await kidRes.json();
+const kidId = kidData.id;
 
 // ADULTOS
 const blocks=document.querySelectorAll("#adultsContainer .card");
@@ -140,51 +124,37 @@ const aPhone=b.querySelector(".phone").value;
 const file=b.querySelector(".photo").files[0];
 const photo=await toBase64(file);
 
-const aRes=await fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-action:"addAdult",
-name:aName,
-phone:aPhone,
-photo
-})
-});
+const fdAdult = new URLSearchParams();
+fdAdult.append("action","addAdult");
+fdAdult.append("name",aName);
+fdAdult.append("phone",aPhone);
+fdAdult.append("photo",photo);
 
-const aData=await aRes.json();
+const aRes = await fetch(API,{method:"POST",body:fdAdult});
+const aData = await aRes.json();
 
 // RELACION
-await fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-action:"linkAdultToKid",
-kid_id:kidId,
-adult_id:aData.id
-})
-});
+const fdRel = new URLSearchParams();
+fdRel.append("action","linkAdultToKid");
+fdRel.append("kid_id",kidId);
+fdRel.append("adult_id",aData.id);
+
+await fetch(API,{method:"POST",body:fdRel});
 
 }
 
 alert("Guardado completo");
 load();
-
-}catch(e){
-alert("Error guardando");
-console.log(e);
-}
 }
 
-// CARGAR
+// CARGAR DATOS
 async function load(){
 
-const r=await fetch(API,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({action:"getFullData"})
-});
+const fd = new URLSearchParams();
+fd.append("action","getFullData");
 
-const data=await r.json();
+const r = await fetch(API,{method:"POST",body:fd});
+const data = await r.json();
 
 let html="";
 
@@ -203,7 +173,6 @@ ${k.adults.map(a=>`
 });
 
 document.getElementById("list").innerHTML=html;
-
 }
 
 </script>
