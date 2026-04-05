@@ -163,21 +163,21 @@ data.forEach(k=>{
 html+=`
 <div class="dashboard-card">
 
-  <div class="kid-info">
-    <h3>${k.name}</h3>
-
-    <div class="adults">
-      ${k.adults.map(a=>`
-        <div class="adult">
-          <img src="${a.photo}">
-          <div class="adult-name">${a.name}</div>
-        </div>
-      `).join("")}
-    </div>
-
+  <!-- IZQUIERDA: ADULTOS -->
+  <div class="adults">
+    ${k.adults.map(a=>`
+      <div class="adult">
+        <img src="${a.photo}">
+        <div class="adult-name">${a.name}</div>
+      </div>
+    `).join("")}
   </div>
 
-  <img class="kid-photo" src="${k.photo}">
+  <!-- DERECHA: NIÑO -->
+  <div class="kid-section">
+    <div class="kid-name">${k.name}</div>
+    <img class="kid-photo" src="${k.photo}">
+  </div>
 
 </div>
 `;
@@ -186,7 +186,6 @@ html+=`
 
 document.getElementById("list").innerHTML=html;
 }
-
 </script>
 
 </body>
