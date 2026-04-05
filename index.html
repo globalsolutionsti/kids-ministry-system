@@ -5,35 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kids Ministry Pro</title>
 
-<!-- ✅ IMPORTANTE: ahora sí usamos el CSS externo -->
 <link rel="stylesheet" href="styles.css">
-
-<style>
-header{background:#1e3a8a;color:white;padding:15px;text-align:center}
-.container{padding:20px}
-.card{background:white;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
-</style>
 
 </head>
 
 <body>
 
-<header>Amistad Fuertes Kids</header>
+<header>
+  Amistad Fuertes Kids
+  <button onclick="logout()" class="logout-btn">Salir</button>
+</header>
 
-<div class="container" id="loginView">
-<h2>Login</h2>
-<input id="user" placeholder="Usuario">
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
+<!-- LOGIN -->
+<div class="login-container" id="loginView">
+  <h2>Login</h2>
+  <input id="user" placeholder="Usuario">
+  <input id="pass" type="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
 </div>
 
+<!-- APP -->
 <div class="container hidden" id="appView">
 
 <div class="card">
 <h3>Registrar Niño</h3>
 
 <input id="kidName" placeholder="Nombre del niño">
-<input type="file" accept="image/*" capture="camera" id="kidPhoto">
+
+<button onclick="openCamera('kid')" class="camera-btn">📸 Tomar Foto Niño</button>
+<img id="kidPreview" class="preview hidden">
 
 <h4>Adultos</h4>
 <div id="adultsContainer"></div>
@@ -49,113 +49,151 @@ header{background:#1e3a8a;color:white;padding:15px;text-align:center}
 
 </div>
 
-<script>
-const API="https://script.google.com/macros/s/AKfycbyoDCt3oslNuX723ZhDXnyG_cS8O7jhpnScIgyB1wcPUFtacplz6d48qGuFR7Z-KvUs/exec";
+<!-- VIDEO CAMERA -->
+<video id="camera" autoplay class="hidden"></video>
+<button id="captureBtn" class="hidden">Capturar</button>
 
-// BASE64
-function toBase64(file){
-return new Promise((res)=>{
-if(!file) return res("");
-const reader=new FileReader();
-reader.onload=()=>res(reader.result);
-reader.readAsDataURL(file);
-});
+<script>
+const API="TU_API_AQUI";
+let currentTarget = "";
+let stream;
+
+// CAMARA
+async function openCamera(type){
+currentTarget = type;
+
+stream = await navigator.mediaDevices.getUserMedia({ video: true });
+const video = document.getElementById("camera");
+video.srcObject = stream;
+video.classList.remove("hidden");
+
+document.getElementById("captureBtn").classList.remove("hidden");
 }
+
+document.getElementById("captureBtn").onclick = function(){
+const video = document.getElementById("camera");
+const canvas = document.createElement("canvas");
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+
+const ctx = canvas.getContext("2d");
+ctx.drawImage(video,0,0);
+
+const base64 = canvas.toDataURL("image/png");
+
+stream.getTracks().forEach(track=>track.stop());
+video.classList.add("hidden");
+this.classList.add("hidden");
+
+// GUARDAR PREVIEW
+if(currentTarget==="kid"){
+document.getElementById("kidPreview").src=base64;
+document.getElementById("kidPreview").classList.remove("hidden");
+document.getElementById("kidPreview").dataset.img=base64;
+}else{
+const last=document.querySelector(".adult:last-child img");
+last.src=base64;
+last.dataset.img=base64;
+}
+};
 
 // LOGIN
 async function login(){
-
-const fd = new URLSearchParams();
+const fd=new URLSearchParams();
 fd.append("action","login");
-fd.append("username",document.getElementById("user").value);
-fd.append("password",document.getElementById("pass").value);
+fd.append("username",user.value);
+fd.append("password",pass.value);
 
-const r = await fetch(API,{method:"POST",body:fd});
-const d = await r.json();
+const r=await fetch(API,{method:"POST",body:fd});
+const d=await r.json();
 
 if(d.success){
-document.getElementById("loginView").classList.add("hidden");
-document.getElementById("appView").classList.remove("hidden");
+loginView.classList.add("hidden");
+appView.classList.remove("hidden");
 load();
-}else{
-alert("Login incorrecto");
-}
+}else alert("Error");
 }
 
-// UI ADULTOS
+// LOGOUT
+function logout(){
+location.reload();
+}
+
+// ADULTOS
 function addAdult(){
 const div=document.createElement("div");
-div.className="card";
+div.className="adult-form";
 
 div.innerHTML=`
 <input placeholder="Nombre" class="name">
 <input placeholder="Teléfono" class="phone">
-<input type="file" accept="image/*" capture="camera" class="photo">
+<button onclick="openCamera('adult')">📸 Foto</button>
+<img class="adult-preview">
 `;
 
-document.getElementById("adultsContainer").appendChild(div);
+adultsContainer.appendChild(div);
 }
 
-// GUARDAR TODO
+// GUARDAR
 async function saveAll(){
 
-const name=document.getElementById("kidName").value;
-const kidPhoto=await toBase64(document.getElementById("kidPhoto").files[0]);
+const kidPhoto=document.getElementById("kidPreview").dataset.img || "";
 
-const fdKid = new URLSearchParams();
+const fdKid=new URLSearchParams();
 fdKid.append("action","addKid");
-fdKid.append("name",name);
+fdKid.append("name",kidName.value);
 fdKid.append("photo",kidPhoto);
 
-const kidRes = await fetch(API,{method:"POST",body:fdKid});
-const kidData = await kidRes.json();
-const kidId = kidData.id;
+const kidRes=await fetch(API,{method:"POST",body:fdKid});
+const kidData=await kidRes.json();
 
-const blocks=document.querySelectorAll("#adultsContainer .card");
+const blocks=document.querySelectorAll(".adult-form");
 
 for(let b of blocks){
 
-const photo=await toBase64(b.querySelector(".photo").files[0]);
-
-const fdAdult = new URLSearchParams();
+const fdAdult=new URLSearchParams();
 fdAdult.append("action","addAdult");
 fdAdult.append("name",b.querySelector(".name").value);
 fdAdult.append("phone",b.querySelector(".phone").value);
-fdAdult.append("photo",photo);
+fdAdult.append("photo",b.querySelector("img").dataset.img || "");
 
-const aRes = await fetch(API,{method:"POST",body:fdAdult});
-const aData = await aRes.json();
+const aRes=await fetch(API,{method:"POST",body:fdAdult});
+const aData=await aRes.json();
 
-const fdRel = new URLSearchParams();
+const fdRel=new URLSearchParams();
 fdRel.append("action","linkAdultToKid");
-fdRel.append("kid_id",kidId);
+fdRel.append("kid_id",kidData.id);
 fdRel.append("adult_id",aData.id);
 
 await fetch(API,{method:"POST",body:fdRel});
 }
 
-alert("Guardado completo");
+alert("Guardado");
 load();
 }
 
-// LOAD DASHBOARD PRO
+// LOAD
 async function load(){
 
-const fd = new URLSearchParams();
+const fd=new URLSearchParams();
 fd.append("action","getFullData");
 
-const r = await fetch(API,{method:"POST",body:fd});
-const data = await r.json();
+const r=await fetch(API,{method:"POST",body:fd});
+const data=await r.json();
 
-let html = "";
+let html="";
 
-data.forEach(k => {
-
-html += `
+data.forEach(k=>{
+html+=`
 <div class="dashboard-card">
 
+  <div class="kid-section">
+    <img class="kid-photo" src="${k.photo}">
+    <div class="kid-name">${k.name}</div>
+  </div>
+
   <div class="adults">
-    ${k.adults.map(a => `
+    ${k.adults.map(a=>`
       <div class="adult">
         <img src="${a.photo}">
         <div class="adult-name">${a.name}</div>
@@ -163,17 +201,11 @@ html += `
     `).join("")}
   </div>
 
-  <div class="kid-section">
-    <div class="kid-name">${k.name}</div>
-    <img class="kid-photo" src="${k.photo}">
-  </div>
-
 </div>
 `;
-
 });
 
-document.getElementById("list").innerHTML = html;
+list.innerHTML=html;
 }
 </script>
 
