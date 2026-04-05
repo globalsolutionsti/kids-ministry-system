@@ -57,14 +57,15 @@ Amistad Fuertes Kids
 
 <script>
 const API="https://script.google.com/macros/s/AKfycbx-PFpJ7Llnw-YVW1O1Z-PhW_kNiwGo4m_MF5me6FN4VF7WzizEjRAOMZHEAuydisaD/exec";
-let currentTarget = "";
+let currentElement = null;
 let stream;
 
-// CAMARA
-async function openCamera(type){
-currentTarget = type;
+async function openCamera(btn){
+
+currentElement = btn; // 👈 guardamos el botón del adulto
 
 stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
 const video = document.getElementById("camera");
 video.srcObject = stream;
 video.classList.remove("hidden");
