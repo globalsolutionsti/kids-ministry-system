@@ -11,7 +11,7 @@
 <body>
 
 <header>
-Ministerio Kids - Gestión de Niños (as)
+Ministerio Kids - Gestión de Entradas / Salidas Kids
 <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Salir</button>
 </header>
 
@@ -253,8 +253,8 @@ div.innerHTML=`
 <input placeholder="Teléfono" class="phone">
 
 <div class="btn-group">
-<button onclick="openCamera('adult', this)">📸 Tomar</button>
-<button onclick="this.nextElementSibling.click()">📁 Subir</button>
+<button onclick="openCamera('adult', this)">📸 Tomar Fotografía</button>
+<button onclick="this.nextElementSibling.click()">📁 Subir Fotografía</button>
 <input type="file" accept="image/*" class="hidden" onchange="uploadImage(event,'adult', this.closest('.adult-form'))">
 </div>
 
