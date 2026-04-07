@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ministerio Kids</title>
 
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 
 <body>
@@ -88,6 +88,24 @@ Ministerio Kids - Gestión de Niños (as)
 
 </div>
 
+<!-- CHECK-IN -->
+<div class="container hidden" id="checkinView">
+<button onclick="goMenu()">⬅ Volver</button>
+<div class="card">
+<h3>Entrada de Niño</h3>
+<p>🚧 Aquí haremos el check-in en la Fase 2</p>
+</div>
+</div>
+
+<!-- CHECK-OUT -->
+<div class="container hidden" id="checkoutView">
+<button onclick="goMenu()">⬅ Volver</button>
+<div class="card">
+<h3>Salida / Entrega</h3>
+<p>🚧 Aquí haremos la validación en la Fase 2</p>
+</div>
+</div>
+
 <!-- CAMERA -->
 <video id="camera" autoplay class="hidden"></video>
 <button id="captureBtn" class="hidden">Capturar</button>
@@ -103,7 +121,30 @@ let allData=[];
 let currentPage=1;
 const perPage=10;
 
-// 📸 CAMARA
+/* =========================
+   🔥 NAVEGACIÓN (FIX ERROR)
+========================= */
+function openView(view){
+document.getElementById("menuView").classList.add("hidden");
+document.getElementById("catalogView").classList.add("hidden");
+document.getElementById("checkinView").classList.add("hidden");
+document.getElementById("checkoutView").classList.add("hidden");
+
+document.getElementById(view).classList.remove("hidden");
+
+if(view==="catalogView") load();
+}
+
+function goMenu(){
+document.getElementById("menuView").classList.remove("hidden");
+document.getElementById("catalogView").classList.add("hidden");
+document.getElementById("checkinView").classList.add("hidden");
+document.getElementById("checkoutView").classList.add("hidden");
+}
+
+/* =========================
+   📸 CÁMARA
+========================= */
 async function openCamera(type, btn=null){
 currentType=type;
 
@@ -120,7 +161,6 @@ camera.classList.remove("hidden");
 captureBtn.classList.remove("hidden");
 }
 
-// 📸 CAPTURA
 captureBtn.onclick=function(){
 
 const canvas=document.createElement("canvas");
@@ -139,7 +179,9 @@ captureBtn.classList.add("hidden");
 setImage(base64);
 };
 
-// 📁 SUBIR IMAGEN
+/* =========================
+   📁 SUBIR IMAGEN
+========================= */
 function uploadImage(e,type,container=null){
 
 const file=e.target.files[0];
@@ -160,7 +202,9 @@ setImage(base64,container);
 reader.readAsDataURL(file);
 }
 
-// 🔥 SET IMAGE
+/* =========================
+   🧠 SET IMAGE
+========================= */
 function setImage(base64,container=null){
 
 if(currentType==="kid" || !container){
@@ -175,7 +219,9 @@ img.dataset.img=base64;
 }
 }
 
-// LOGIN
+/* =========================
+   🔐 LOGIN
+========================= */
 async function login(){
 const fd=new URLSearchParams();
 fd.append("action","login");
@@ -194,7 +240,9 @@ logoutBtn.classList.remove("hidden");
 
 function logout(){location.reload();}
 
-// ADULTOS
+/* =========================
+   👨‍👩‍👧 ADULTOS
+========================= */
 function addAdult(){
 
 const div=document.createElement("div");
@@ -216,7 +264,9 @@ div.innerHTML=`
 adultsContainer.appendChild(div);
 }
 
-// GUARDAR (SIN CAMBIOS)
+/* =========================
+   💾 GUARDAR
+========================= */
 async function saveAll(){
 
 const kidPhoto=kidPreview.dataset.img || "";
@@ -260,7 +310,9 @@ alert("Registro guardado");
 load();
 }
 
-// LOAD + RENDER (igual)
+/* =========================
+   📊 LOAD + RENDER
+========================= */
 async function load(){
 const fd=new URLSearchParams();
 fd.append("action","getFullData");
@@ -301,8 +353,19 @@ list.innerHTML=html;
 pageInfo.innerText=`Página ${currentPage} de ${Math.ceil(allData.length/perPage)}`;
 }
 
-function nextPage(){ if(currentPage*perPage<allData.length){ currentPage++; render(); } }
-function prevPage(){ if(currentPage>1){ currentPage--; render(); } }
+function nextPage(){
+if(currentPage*perPage<allData.length){
+currentPage++;
+render();
+}
+}
+
+function prevPage(){
+if(currentPage>1){
+currentPage--;
+render();
+}
+}
 </script>
 
 </body>
