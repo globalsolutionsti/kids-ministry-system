@@ -310,3 +310,10 @@ video{
   padding:8px 14px;
   font-size:13px;
 }
+
+/* BOTONES AGRUPADOS */
+.btn-group{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
