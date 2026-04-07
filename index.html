@@ -32,7 +32,7 @@ Ministerio Kids - Gestión de Niños (as)
 
     <div class="menu-card" onclick="openView('catalogView')">
       📋
-      <h3>Catálogo de Niños</h3>
+      <h3>Base de Datos Kids</h3>
     </div>
 
     <div class="menu-card" onclick="openView('checkinView')">
@@ -54,14 +54,14 @@ Ministerio Kids - Gestión de Niños (as)
 <button onclick="goMenu()" class="btn-secondary">⬅ Volver</button>
 
 <div class="card">
-<h3>Registrar Niño</h3>
+<h3>Registrar Niño (a)</h3>
 
-<input id="kidName" placeholder="Nombre del niño">
+<input id="kidName" placeholder="Nombre del niño (a)">
 
 <!-- BOTONES FOTO -->
 <div class="btn-group">
-<button onclick="openCamera('kid')" class="camera-btn btn-main">📸 Tomar</button>
-<button onclick="document.getElementById('fileKid').click()" class="btn-secondary">📁 Subir</button>
+<button onclick="openCamera('kid')" class="camera-btn btn-main">📸 Tomar Fotografía</button>
+<button onclick="document.getElementById('fileKid').click()" class="btn-secondary">📁 Subir Fotografía</button>
 <input type="file" id="fileKid" accept="image/*" class="hidden" onchange="uploadImage(event,'kid')">
 </div>
 
@@ -69,9 +69,9 @@ Ministerio Kids - Gestión de Niños (as)
 
 <h4>Adultos Autorizados</h4>
 <div id="adultsContainer"></div>
-<button onclick="addAdult()" class="btn-secondary">+ Adulto</button>
+<button onclick="addAdult()" class="btn-secondary">Agregar Adulto Autorizado</button>
 
-<button onclick="saveAll()" class="btn-main">Guardar Registro</button>
+<button onclick="saveAll()" class="btn-main">Guardar Información en Base de Datos</button>
 </div>
 
 <div class="card">
