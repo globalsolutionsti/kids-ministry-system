@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ministerio Kids</title>
 
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 
 <body>
@@ -48,7 +48,7 @@ Ministerio Kids - Gestión de Niños (as)
   </div>
 </div>
 
-<!-- CATALOGO (TU SISTEMA ACTUAL) -->
+<!-- CATALOGO -->
 <div class="container hidden" id="catalogView">
 
 <button onclick="goMenu()" class="btn-secondary">⬅ Volver</button>
@@ -58,7 +58,13 @@ Ministerio Kids - Gestión de Niños (as)
 
 <input id="kidName" placeholder="Nombre del niño">
 
-<button onclick="openCamera('kid')" class="camera-btn btn-main">📸 Foto Niño</button>
+<!-- BOTONES FOTO -->
+<div class="btn-group">
+<button onclick="openCamera('kid')" class="camera-btn btn-main">📸 Tomar</button>
+<button onclick="document.getElementById('fileKid').click()" class="btn-secondary">📁 Subir</button>
+<input type="file" id="fileKid" accept="image/*" class="hidden" onchange="uploadImage(event,'kid')">
+</div>
+
 <img id="kidPreview" class="preview hidden">
 
 <h4>Adultos Autorizados</h4>
@@ -82,24 +88,6 @@ Ministerio Kids - Gestión de Niños (as)
 
 </div>
 
-<!-- CHECK-IN -->
-<div class="container hidden" id="checkinView">
-<button onclick="goMenu()">⬅ Volver</button>
-<div class="card">
-<h3>Entrada de Niño</h3>
-<p>🚧 Aquí haremos el check-in en la Fase 2</p>
-</div>
-</div>
-
-<!-- CHECK-OUT -->
-<div class="container hidden" id="checkoutView">
-<button onclick="goMenu()">⬅ Volver</button>
-<div class="card">
-<h3>Salida / Entrega</h3>
-<p>🚧 Aquí haremos la validación en la Fase 2</p>
-</div>
-</div>
-
 <!-- CAMERA -->
 <video id="camera" autoplay class="hidden"></video>
 <button id="captureBtn" class="hidden">Capturar</button>
@@ -115,28 +103,8 @@ let allData=[];
 let currentPage=1;
 const perPage=10;
 
-// 🔥 NAVEGACIÓN
-function openView(view){
-menuView.classList.add("hidden");
-catalogView.classList.add("hidden");
-checkinView.classList.add("hidden");
-checkoutView.classList.add("hidden");
-
-document.getElementById(view).classList.remove("hidden");
-
-if(view==="catalogView") load();
-}
-
-function goMenu(){
-menuView.classList.remove("hidden");
-catalogView.classList.add("hidden");
-checkinView.classList.add("hidden");
-checkoutView.classList.add("hidden");
-}
-
 // 📸 CAMARA
 async function openCamera(type, btn=null){
-
 currentType=type;
 
 if(type==="adult"){
@@ -152,7 +120,7 @@ camera.classList.remove("hidden");
 captureBtn.classList.remove("hidden");
 }
 
-// CAPTURA
+// 📸 CAPTURA
 captureBtn.onclick=function(){
 
 const canvas=document.createElement("canvas");
@@ -168,21 +136,47 @@ stream.getTracks().forEach(t=>t.stop());
 camera.classList.add("hidden");
 captureBtn.classList.add("hidden");
 
-if(currentType==="kid"){
+setImage(base64);
+};
+
+// 📁 SUBIR IMAGEN
+function uploadImage(e,type,container=null){
+
+const file=e.target.files[0];
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=function(ev){
+const base64=ev.target.result;
+
+if(type==="kid"){
+setImage(base64);
+}else{
+setImage(base64,container);
+}
+};
+
+reader.readAsDataURL(file);
+}
+
+// 🔥 SET IMAGE
+function setImage(base64,container=null){
+
+if(currentType==="kid" || !container){
 kidPreview.src=base64;
 kidPreview.classList.remove("hidden");
 kidPreview.dataset.img=base64;
 }else{
-const img=currentAdultContainer.querySelector(".preview");
+const img=container.querySelector(".preview");
 img.src=base64;
 img.classList.remove("hidden");
 img.dataset.img=base64;
 }
-};
+}
 
 // LOGIN
 async function login(){
-
 const fd=new URLSearchParams();
 fd.append("action","login");
 fd.append("username",user.value);
@@ -198,7 +192,6 @@ logoutBtn.classList.remove("hidden");
 }else alert("Login incorrecto");
 }
 
-// LOGOUT
 function logout(){location.reload();}
 
 // ADULTOS
@@ -210,14 +203,20 @@ div.className="card adult-form";
 div.innerHTML=`
 <input placeholder="Nombre" class="name">
 <input placeholder="Teléfono" class="phone">
-<button onclick="openCamera('adult', this)">📸 Foto</button>
+
+<div class="btn-group">
+<button onclick="openCamera('adult', this)">📸 Tomar</button>
+<button onclick="this.nextElementSibling.click()">📁 Subir</button>
+<input type="file" accept="image/*" class="hidden" onchange="uploadImage(event,'adult', this.closest('.adult-form'))">
+</div>
+
 <img class="preview hidden">
 `;
 
 adultsContainer.appendChild(div);
 }
 
-// GUARDAR
+// GUARDAR (SIN CAMBIOS)
 async function saveAll(){
 
 const kidPhoto=kidPreview.dataset.img || "";
@@ -251,7 +250,6 @@ fdRel.append("adult_id",aData.id);
 await fetch(API,{method:"POST",body:fdRel});
 }
 
-// LIMPIAR
 kidName.value="";
 kidPreview.src="";
 kidPreview.classList.add("hidden");
@@ -259,29 +257,22 @@ delete kidPreview.dataset.img;
 adultsContainer.innerHTML="";
 
 alert("Registro guardado");
-
 load();
 }
 
-// LOAD
+// LOAD + RENDER (igual)
 async function load(){
-
 const fd=new URLSearchParams();
 fd.append("action","getFullData");
-
 const r=await fetch(API,{method:"POST",body:fd});
 allData=await r.json();
-
 currentPage=1;
 render();
 }
 
-// RENDER
 function render(){
-
 const start=(currentPage-1)*perPage;
 const end=start+perPage;
-
 const data=allData.slice(start,end);
 
 let html="";
@@ -300,33 +291,18 @@ ${k.adults.map(a=>`
 <div class="adult">
 <img src="${a.photo}">
 <div class="adult-name">${a.name}</div>
-</div>
-`).join("")}
+</div>`).join("")}
 </div>
 
-</div>
-`;
+</div>`;
 });
 
 list.innerHTML=html;
-
 pageInfo.innerText=`Página ${currentPage} de ${Math.ceil(allData.length/perPage)}`;
 }
 
-// PAGINACION
-function nextPage(){
-if(currentPage*perPage<allData.length){
-currentPage++;
-render();
-}
-}
-
-function prevPage(){
-if(currentPage>1){
-currentPage--;
-render();
-}
-}
+function nextPage(){ if(currentPage*perPage<allData.length){ currentPage++; render(); } }
+function prevPage(){ if(currentPage>1){ currentPage--; render(); } }
 </script>
 
 </body>
